@@ -58,7 +58,7 @@ print(len(train_SRL), len(test_SRL))
 
 
 w2v_embdding_size = 100
-w2v = Word2Vec.load("word2vec")
+w2v = Word2Vec.load("word2vec_model")
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
