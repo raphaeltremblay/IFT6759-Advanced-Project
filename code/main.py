@@ -11,23 +11,24 @@ label_SC, label_SSR, label_SRL = set(), set(), set()
 
 dir = os.getcwd()
 dir = dir.replace("\code", "")
+#Choose which dataset to use below between "COR" and "MAM"
+dataset = "COR"
 
 
-
-for line in open(dir+"/data/MAM-SC.txt").read().split("\n"):
+for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if len(objs)==2:
 		all_SC.append(objs)
 		label_SC.add(objs[-1])
 
-for line in open(dir+"/data/MAM-SSR.txt").read().split("\n"):
+for line in open(dir+"/data/"+dataset+"-SSR.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if line.endswith(", y") and len(objs)==3:
 		objs = objs[:-1]
 		all_SSR.append(objs)
 		label_SSR.add(objs[-1])
 
-for line in open(dir+"/data/MAM-SRL.txt").read().split("\n"):
+for line in open(dir+"/data/"+dataset+"-SRL.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if len(objs)==3:
 		all_SRL.append(objs)
