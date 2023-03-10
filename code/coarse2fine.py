@@ -131,7 +131,7 @@ class C2F(torch.nn.Module):
 
 	def train(self, train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3):
 
-		criterion = torch.nn.CrossEntropyLoss(reduce=True, size_average=False)
+		criterion = torch.nn.CrossEntropyLoss(reduction="sum")
 		optimizer = optim.Adam(self.parameters(), lr=0.00001)
 
 		v_test_x1  = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x1])))
