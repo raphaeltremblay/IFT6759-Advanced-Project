@@ -1,26 +1,33 @@
+import gensim.models.word2vec
 import numpy as np
-from gensim.models.word2vec import Word2Vec
+from gensim.models import Word2Vec
+from gensim import downloader
 from coarse2fine import C2F
-
+import os
 
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
 
-for line in open("./data/MAM-SC.txt").read().split("\n"):
+dir = os.getcwd()
+dir = dir.replace("\code", "")
+
+
+
+for line in open(dir+"/data/MAM-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if len(objs)==2:
 		all_SC.append(objs)
 		label_SC.add(objs[-1])
 
-for line in open("./data/MAM-SSR.txt").read().split("\n"):
+for line in open(dir+"/data/MAM-SSR.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if line.endswith(", y") and len(objs)==3:
 		objs = objs[:-1]
 		all_SSR.append(objs)
 		label_SSR.add(objs[-1])
 
-for line in open("./data/MAM-SRL.txt").read().split("\n"):
+for line in open(dir+"/data/MAM-SRL.txt").read().split("\n"):
 	objs = line.lower().split(", ")
 	if len(objs)==3:
 		all_SRL.append(objs)
@@ -51,8 +58,8 @@ print(len(train_SRL), len(test_SRL))
 
 
 w2v_embdding_size = 100
-w2v = Word2Vec.load("./w2v/w2v_model")
-vocabulary = set(open("./w2v/text8_vocabulary.txt").read().split("\n"))
+w2v = Word2Vec.load("word2vec")
+vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
 label_SSR = list(label_SSR)
@@ -68,11 +75,11 @@ def Encode_Sentence_Data(array, label_map):
 		mat = []
 		for word in words:
 			if(word in vocabulary):
-				mat.append(w2v[word])
+				mat.append(w2v.wv[word])
 			else:
-				mat.append(w2v["a"])
+				mat.append(w2v.wv["a"])
 		while len(mat)<10:
-			mat.append(w2v["a"])
+			mat.append(w2v.wv["a"])
 		mat = mat[:10]
 
 		embeddings.append(mat)
@@ -91,11 +98,11 @@ def Encode_Word_Data(array, label_map):
 		mat = []
 		for word in words:
 			if(word in vocabulary):
-				mat.append(w2v[word])
+				mat.append(w2v.wv[word])
 			else:
-				mat.append(w2v["a"])
+				mat.append(w2v.wv["a"])
 		while len(mat)<10:
-			mat.append(w2v["a"])
+			mat.append(w2v.wv["a"])
 		mat = mat[:10]
 
 		embeddings.append(mat)
@@ -103,12 +110,12 @@ def Encode_Word_Data(array, label_map):
 		index = int(line[1])
 		center_word = line[0].split(" ")[index]
 		if (center_word in vocabulary):
-			rep = list(np.array(w2v[center_word]))
+			rep = list(np.array(w2v.wv[center_word]))
 			rep.extend([index*1.0])
 			rep = [float(obj) for obj in rep]
 			wembeddings.append(rep)
 		else:
-			rep = list(np.array(w2v["a"]))
+			rep = list(np.array(w2v.wv["a"]))
 			rep.extend([index * 1.0])
 			rep = [float(obj) for obj in rep]
 			wembeddings.append(rep)
