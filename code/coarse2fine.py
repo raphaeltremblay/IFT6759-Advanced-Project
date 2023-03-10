@@ -14,10 +14,10 @@ def Max_Index(array):
 	return max_index
 
 def Get_Report(true_labels, pred_labels, labels=None, digits=4):
-	recall = metrics.recall_score(true_labels, pred_labels, average='macro')
-	precision = metrics.precision_score(true_labels, pred_labels, average='macro')
-	macrof1 = metrics.f1_score(true_labels, pred_labels, average='macro')
-	microf1 = metrics.f1_score(true_labels, pred_labels, average='micro')
+	recall = metrics.recall_score(true_labels, pred_labels, average='macro', zero_division=0)
+	precision = metrics.precision_score(true_labels, pred_labels, average='macro', zero_division=0)
+	macrof1 = metrics.f1_score(true_labels, pred_labels, average='macro', zero_division=0)
+	microf1 = metrics.f1_score(true_labels, pred_labels, average='micro', zero_division=0)
 	acc = metrics.accuracy_score(true_labels, pred_labels)
 	return recall, precision, macrof1, microf1, acc
 
