@@ -12,7 +12,7 @@ label_SC, label_SSR, label_SRL = set(), set(), set()
 dir = os.getcwd()
 dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
-dataset = "COR"
+dataset = "MAM"
 
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
