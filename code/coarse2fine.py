@@ -2,6 +2,7 @@ import torch
 from torch import optim
 import numpy as np
 import sklearn.metrics as metrics
+import pandas as pd
 
 
 
@@ -205,4 +206,9 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
+			recall_df, precision_df, macrof1_df, microf1_df = pd.DataFrame(recall).transpose(), pd.DataFrame(precision).transpose(), pd.DataFrame(macrof1).transpose(), pd.DataFrame(microf1).transpose()
+			recall_df.to_csv("recall.csv")
+			precisiom_df.to_csv("precision.csv")
+			macrof1_df.to_csv("macrof1.csv")
+			microf1_df.to_csv("micro.csv")
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
