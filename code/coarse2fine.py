@@ -186,10 +186,8 @@ class C2F(torch.nn.Module):
 		v_test_x3s = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x3s])))
 		v_test_x3w = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x3w])))
 		
-		recall_df = pd.DataFrame()
-		precision_df = pd.DataFrame()
-		macrof1_df = pd.DataFrame()
-		microf1_df = pd.DataFrame()
+		df = pd.DataFrame()
+		df.columns = ['recall','precision','macrof1','microf1','acc']
 		
 		for epoch in range(1000):
 			optimizer.zero_grad()
@@ -211,13 +209,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
-			recall_df = recall_df.append(recall,ignore_index=True)
-			precision_df = precision_df.append(precision,ignore_index=True)
-			macro_f1 = macrof1_df.append(macro_f1,ignore_index=True)
-			micro_f1 = microf1_df.append(micro_f1,ignore_index=True)
+			df = df.append({'recall':recall,'precision':precision,'macrof1':macrof1,'microf1':microf1,'acc':acc})
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 		
-		recall_df.transpose().to_csv("recall.csv")
-		precisiom_df.transpose().to_csv("precision.csv")
-		macrof1_df.transpose().to_csv("macrof1.csv")
-		microf1_df.transpose().to_csv("micro.csv")
+		df.transpose().to_csv("metrics.csv")
