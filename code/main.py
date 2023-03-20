@@ -5,6 +5,7 @@ from gensim import downloader
 from coarse2fine import C2F
 import os
 
+print(gensim.__version__)
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
@@ -47,8 +48,6 @@ print(label_SSR)
 print(len(all_SRL))
 print(all_SRL[0:10])
 print(label_SRL)
-
-print(gensim.__version__)
 
 
 ratio = 0.80
