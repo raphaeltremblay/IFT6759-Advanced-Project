@@ -186,8 +186,8 @@ class C2F(torch.nn.Module):
 		v_test_x3s = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x3s])))
 		v_test_x3w = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x3w])))
 		
-		df = pd.DataFrame()
-		df.columns = ['recall','precision','macrof1','microf1','acc']
+		df = pd.DataFrame(columns = range(5))
+# 		df.columns = ['recall','precision','macrof1','microf1','acc']
 		
 		for epoch in range(1000):
 			optimizer.zero_grad()
