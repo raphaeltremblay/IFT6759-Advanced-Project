@@ -9,8 +9,9 @@ import os
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
 
-dir = os.getcwd()
-dir = dir.replace("\code", "")
+# dir = os.getcwd()
+# dir = dir.replace("\code", "")
+dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model",
