@@ -206,6 +206,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
+			print(type(recall))
 			recall_df = pd.DataFrame(recall).transpose()
 # 			precision_df = pd.DataFrame(precision).transpose()
 # 			macrof1_df = pd.DataFrame(macrof1).transpose()
