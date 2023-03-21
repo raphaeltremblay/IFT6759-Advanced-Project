@@ -137,8 +137,7 @@ class C2F(torch.nn.Module):
 
 		v_test_x1  = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x1])))
 
-# 		for epoch in range(100):
-		for epoch in range(10):
+		for epoch in range(100):
 			optimizer.zero_grad()
 
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
@@ -162,8 +161,7 @@ class C2F(torch.nn.Module):
 
 		v_test_x2 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x2])))
 
-# 		for epoch in range(200):
-		for epoch in range(20):
+		for epoch in range(200):
 			optimizer.zero_grad()
 
 			rand_index_x2 = np.random.choice(len(train_x2), size=32, replace=False)
@@ -189,10 +187,8 @@ class C2F(torch.nn.Module):
 		v_test_x3w = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x3w])))
 		
 		df = pd.DataFrame()
-# 		df.columns = ['recall','precision','macrof1','microf1','acc']
 		
-# 		for epoch in range(1000):
-		for epoch in range(10):
+		for epoch in range(1000):
 			optimizer.zero_grad()
 
 			rand_index_x3 = np.random.choice(len(train_x3s), size=32, replace=False)
@@ -212,7 +208,6 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
-# 			print(temp)
 			df = pd.concat([df,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 		
