@@ -189,7 +189,8 @@ class C2F(torch.nn.Module):
 		df = pd.DataFrame(columns = range(5)).transpose()
 		df.columns = ['recall','precision','macrof1','microf1','acc']
 		
-		for epoch in range(1000):
+# 		for epoch in range(1000):
+		for epoch in range(10):
 			optimizer.zero_grad()
 
 			rand_index_x3 = np.random.choice(len(train_x3s), size=32, replace=False)
