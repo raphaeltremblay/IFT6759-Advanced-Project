@@ -5,7 +5,6 @@ from gensim import downloader
 from coarse2fine import C2F
 import os
 
-print(gensim.__version__)
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
