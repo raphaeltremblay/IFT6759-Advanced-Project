@@ -216,4 +216,4 @@ class C2F(torch.nn.Module):
 			df = pd.concat([df,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 		
-# 		df.transpose().to_csv("../metrics.csv")
+		df.to_csv("../metrics.csv")
