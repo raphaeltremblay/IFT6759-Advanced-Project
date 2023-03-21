@@ -9,8 +9,9 @@ import os
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
 
-dir = os.getcwd()
-dir = dir.replace("\code", "")
+# dir = os.getcwd()
+# dir = dir.replace("\code", "")
+dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model",
@@ -46,7 +47,6 @@ print(label_SSR)
 print(len(all_SRL))
 print(all_SRL[0:10])
 print(label_SRL)
-
 
 
 ratio = 0.80
