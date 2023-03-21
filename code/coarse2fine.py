@@ -212,7 +212,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
-			temp = pd.DataFrame([recall,precision,macrof1,microf1,acc],columns=['recall','precision','macrof1','microf1','acc'])
+			temp = pd.DataFrame([recall,precision,macrof1,microf1,acc],columns=['recall','precision','macrof1','microf1','acc'],axis=0)
 			print(temp)
 # 			df = pd.concat([df,temp],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
