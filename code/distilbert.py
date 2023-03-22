@@ -229,6 +229,9 @@ class DistilBertModels(nn.Module):
 		criterion = torch.nn.CrossEntropyLoss(reduction="sum")
 		optimizer = optim.Adam(self.parameters(), lr=0.00001)
 		v_test_x = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x])))
+		
+		df = pd.DataFrame()
+		
 		for epoch in range(100):
 
 			optimizer.zero_grad()
@@ -249,4 +252,7 @@ class DistilBertModels(nn.Module):
 			prediction_test = self.forward(v_test_x, v_test_y)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y, pre_labels)
+			df = pd.concat([df,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
+		
+		df.to_csv("../metrics.csv")
