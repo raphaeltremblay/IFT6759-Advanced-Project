@@ -136,7 +136,9 @@ class C2F(torch.nn.Module):
 		optimizer = optim.Adam(self.parameters(), lr=0.00001)
 
 		v_test_x1  = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x1])))
-
+		
+		df1 = pd.DataFrame()
+		
 		for epoch in range(100):
 			optimizer.zero_grad()
 
