@@ -158,7 +158,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.coarse_forward1(v_test_x1)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y1, pre_labels)
-			df1 = pd.concat([df3,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
+			df1 = pd.concat([df1,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print( "[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
 		df1.to_csv("../metrics_v1.csv")
@@ -183,7 +183,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.coarse_forward2(v_test_x2)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y2, pre_labels)
-			df2 = pd.concat([df3,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
+			df2 = pd.concat([df2,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
 		df2.to_csv("../metrics_v2.csv")
