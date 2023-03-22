@@ -239,7 +239,7 @@ class DistilBertModels(nn.Module):
 
 			rand_index = np.random.choice(len(train_x), size=32, replace=False)
 
-			batch_x = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for i, obj in enumerate(train_x) if i in rand_index])))
+			batch_x = torch.autograd.Variable(torch.LongTensor(np.array([np.array(obj) for i, obj in enumerate(train_x) if i in rand_index])))
 			batch_y = torch.autograd.Variable(torch.LongTensor(np.array([obj for i, obj in enumerate(train_y) if i in rand_index])))
 
 			train_prediction = self.forward(batch_x, batch_y)
