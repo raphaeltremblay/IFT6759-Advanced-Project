@@ -1,10 +1,11 @@
 import gensim.models.word2vec
 import numpy as np
+import torch
 from gensim.models import Word2Vec
 from gensim import downloader
 from coarse2fine import C2F
 import os
-
+import pytorch_pretrained_bert
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
@@ -13,9 +14,23 @@ dir = os.getcwd()
 dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
+<<<<<<< Updated upstream
 #Choose which embedding model to use below between word2vec_model, 
 model_name = "word2vec_model"
 
+=======
+#Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
+model_name = "word2vec_model"
+
+w2v_embdding_size = 100
+
+if model_name=="word2vec_model":
+	model = Word2Vec.load(model_name)
+
+if model_name=="bert_pretrained":
+	model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+	model.to("cuda")
+>>>>>>> Stashed changes
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
@@ -60,8 +75,6 @@ print(len(train_SRL), len(test_SRL))
 
 
 
-w2v_embdding_size = 100
-model = Word2Vec.load(model_name)
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
@@ -73,19 +86,28 @@ def Encode_Sentence_Data(array, label_map):
 	embeddings, labels = [], []
 	for line in array:
 		words = line[0].split(" ")
-		label = line[1]
+		sentence = line[0]
+		label = line[-1]
 
 		mat = []
-		for word in words:
-			if(word in vocabulary):
-				mat.append(model.wv[word])
-			else:
+		if model_name=="word2vec_model":
+			for word in words:
+				if(word in vocabulary):
+					mat.append(model.wv[word])
+				else:
+					mat.append(model.wv["a"])
+			while len(mat)<10:
 				mat.append(model.wv["a"])
-		while len(mat)<10:
-			mat.append(model.wv["a"])
-		mat = mat[:10]
+			mat = mat[:10]
+			embeddings.append(mat)
 
-		embeddings.append(mat)
+		if model_name=="bert_pretrained":
+			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+			tokenized_text = tokenizer.tokenize(sentence)
+			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
+			tokens_tensor = torch.tensor([indexed_tokens])
+			embeddings.append(tokens_tensor)
+
 		labels.append(label_map.index(label))
 
 		# print(line)
