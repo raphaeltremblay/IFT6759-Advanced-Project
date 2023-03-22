@@ -163,7 +163,9 @@ class C2F(torch.nn.Module):
 
 		df1.to_csv("../metrics_v1.csv")
 		v_test_x2 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x2])))
-
+		
+		df2 = pd.DataFrame()
+		
 		for epoch in range(200):
 			optimizer.zero_grad()
 
