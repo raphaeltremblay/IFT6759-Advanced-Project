@@ -13,6 +13,8 @@ dir = os.getcwd()
 dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
+#Choose which embedding model to use below between word2vec_model, 
+model_name = "word2vec_model"
 
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
@@ -59,7 +61,7 @@ print(len(train_SRL), len(test_SRL))
 
 
 w2v_embdding_size = 100
-w2v = Word2Vec.load("word2vec_model")
+model = Word2Vec.load(model_name)
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
@@ -76,11 +78,11 @@ def Encode_Sentence_Data(array, label_map):
 		mat = []
 		for word in words:
 			if(word in vocabulary):
-				mat.append(w2v.wv[word])
+				mat.append(model.wv[word])
 			else:
-				mat.append(w2v.wv["a"])
+				mat.append(model.wv["a"])
 		while len(mat)<10:
-			mat.append(w2v.wv["a"])
+			mat.append(model.wv["a"])
 		mat = mat[:10]
 
 		embeddings.append(mat)
@@ -99,11 +101,11 @@ def Encode_Word_Data(array, label_map):
 		mat = []
 		for word in words:
 			if(word in vocabulary):
-				mat.append(w2v.wv[word])
+				mat.append(model.wv[word])
 			else:
-				mat.append(w2v.wv["a"])
+				mat.append(model.wv["a"])
 		while len(mat)<10:
-			mat.append(w2v.wv["a"])
+			mat.append(model.wv["a"])
 		mat = mat[:10]
 
 		embeddings.append(mat)
@@ -111,12 +113,12 @@ def Encode_Word_Data(array, label_map):
 		index = int(line[1])
 		center_word = line[0].split(" ")[index]
 		if (center_word in vocabulary):
-			rep = list(np.array(w2v.wv[center_word]))
+			rep = list(np.array(model.wv[center_word]))
 			rep.extend([index*1.0])
 			rep = [float(obj) for obj in rep]
 			wembeddings.append(rep)
 		else:
-			rep = list(np.array(w2v.wv["a"]))
+			rep = list(np.array(model.wv["a"]))
 			rep.extend([index * 1.0])
 			rep = [float(obj) for obj in rep]
 			wembeddings.append(rep)
