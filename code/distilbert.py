@@ -36,8 +36,8 @@ class DistilBertModels(nn.Module):
 	def forward(self, input_ids, attention_mask):
 		# ValueError: Input Tensor  is not valid. Should be a string, a list/tuple of strings or a list/tuple of integers.
 		# Resolve this error by converting the input_ids to a tensor
-		input_ids =  torch.tensor(input_ids)
-		#input_ids = torch.tensor(self.tokenizer.encode(input_ids, add_special_tokens=True)).unsqueeze(0)
+# 		input_ids =  torch.tensor(input_ids)
+		input_ids = torch.tensor(self.tokenizer.encode(input_ids, add_special_tokens=True)).unsqueeze(0)
 		attention_mask = torch.tensor([1] * len(input_ids[0])).unsqueeze(0)
 		_, pooled_output = self.model(input_ids=input_ids, attention_mask=attention_mask)
 		output = self.linear(pooled_output)
