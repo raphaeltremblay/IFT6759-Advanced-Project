@@ -15,7 +15,7 @@ dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
-model_name = "word2vec_model"
+model_name = "bert_pretrained"
 
 
 w2v_embdding_size = 100
@@ -147,7 +147,12 @@ def Encode_Word_Data(array, label_map):
 			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
 			tokens_tensor = torch.tensor([indexed_tokens])
 			embeddings.append(tokens_tensor)
-
+			index = int(line[1])
+			center_word = line[0].split(" ")[index]
+			rep = list(np.array(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(center_word))))
+			rep.extend([index * 1.0])
+			rep = [float(obj) for obj in rep]
+			wembeddings.append(rep)
 		labels.append(label_map.index(label))
 
 		# print(line)
