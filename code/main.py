@@ -15,7 +15,8 @@ dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
-model_name = "bert_pretrained"
+model_name = "word2vec_model"
+
 
 w2v_embdding_size = 100
 
@@ -81,7 +82,7 @@ def Encode_Sentence_Data(array, label_map):
 	for line in array:
 		words = line[0].split(" ")
 		sentence = line[0]
-		label = line[-1]
+		label = line[1]
 
 		mat = []
 		if model_name=="word2vec_model":
@@ -139,7 +140,7 @@ def Encode_Word_Data(array, label_map):
 				rep.extend([index * 1.0])
 				rep = [float(obj) for obj in rep]
 				wembeddings.append(rep)
-				
+
 		if model_name=="bert_pretrained":
 			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 			tokenized_text = tokenizer.tokenize(sentence)
