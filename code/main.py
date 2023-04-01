@@ -5,7 +5,7 @@ from gensim.models import Word2Vec
 from gensim import downloader
 from coarse2fine import C2F
 import os
-import pytorch_pretrained_bert
+from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
@@ -14,13 +14,8 @@ dir = os.getcwd()
 dir = dir.replace("\code", "")
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
-<<<<<<< Updated upstream
-#Choose which embedding model to use below between word2vec_model, 
-model_name = "word2vec_model"
-
-=======
 #Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
-model_name = "word2vec_model"
+model_name = "bert_pretrained"
 
 w2v_embdding_size = 100
 
@@ -29,8 +24,7 @@ if model_name=="word2vec_model":
 
 if model_name=="bert_pretrained":
 	model = BertForMaskedLM.from_pretrained('bert-base-uncased')
-	model.to("cuda")
->>>>>>> Stashed changes
+	#model.to("cuda")
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
@@ -145,6 +139,7 @@ def Encode_Word_Data(array, label_map):
 				rep.extend([index * 1.0])
 				rep = [float(obj) for obj in rep]
 				wembeddings.append(rep)
+				
 		if model_name=="bert_pretrained":
 			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 			tokenized_text = tokenizer.tokenize(sentence)
