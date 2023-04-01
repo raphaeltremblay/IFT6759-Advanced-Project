@@ -121,29 +121,36 @@ def Encode_Word_Data(array, label_map):
 		label = line[-1]
 
 		mat = []
-		for word in words:
-			if(word in vocabulary):
-				mat.append(model.wv[word])
-			else:
+		if model_name == "word2vec_model":
+			for word in words:
+				if(word in vocabulary):
+					mat.append(model.wv[word])
+				else:
+					mat.append(model.wv["a"])
+			while len(mat)<10:
 				mat.append(model.wv["a"])
-		while len(mat)<10:
-			mat.append(model.wv["a"])
-		mat = mat[:10]
+			mat = mat[:10]
 
-		embeddings.append(mat)
+			embeddings.append(mat)
 
-		index = int(line[1])
-		center_word = line[0].split(" ")[index]
-		if (center_word in vocabulary):
-			rep = list(np.array(model.wv[center_word]))
-			rep.extend([index*1.0])
-			rep = [float(obj) for obj in rep]
-			wembeddings.append(rep)
-		else:
-			rep = list(np.array(model.wv["a"]))
-			rep.extend([index * 1.0])
-			rep = [float(obj) for obj in rep]
-			wembeddings.append(rep)
+			index = int(line[1])
+			center_word = line[0].split(" ")[index]
+			if (center_word in vocabulary):
+				rep = list(np.array(model.wv[center_word]))
+				rep.extend([index*1.0])
+				rep = [float(obj) for obj in rep]
+				wembeddings.append(rep)
+			else:
+				rep = list(np.array(model.wv["a"]))
+				rep.extend([index * 1.0])
+				rep = [float(obj) for obj in rep]
+				wembeddings.append(rep)
+		if model_name=="bert_pretrained":
+			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+			tokenized_text = tokenizer.tokenize(sentence)
+			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
+			tokens_tensor = torch.tensor([indexed_tokens])
+			embeddings.append(tokens_tensor)
 
 		labels.append(label_map.index(label))
 
