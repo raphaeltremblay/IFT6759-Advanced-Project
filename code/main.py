@@ -18,7 +18,7 @@ dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model" and "bert_pretrained",
-model_name = sys.argv[1]
+model_name = sys.argv[2]
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
