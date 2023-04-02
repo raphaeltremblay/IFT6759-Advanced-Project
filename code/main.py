@@ -80,6 +80,7 @@ def Encode_Sentence_Data(array, label_map):
 	for line in array:
 		words = line[0].split(" ")
 		label = line[1]
+		sentence = line[0]
 		mat = [] 
 		if model_name=="word2vec_model":
 			for word in words:
