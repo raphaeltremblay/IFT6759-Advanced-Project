@@ -6,6 +6,7 @@ from coarse2fine import C2F
 from distilbert import DistilBertModels
 import pytorch_pretrained_bert
 from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
+import torch
 import os
 import sys
 
