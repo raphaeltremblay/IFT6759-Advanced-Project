@@ -4,6 +4,7 @@ from gensim.models import Word2Vec
 from gensim import downloader
 from coarse2fine import C2F
 from distilbert import DistilBertModels
+import pytorch_pretrained_bert
 from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
 import os
 import sys
