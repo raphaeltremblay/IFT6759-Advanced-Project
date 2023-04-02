@@ -67,7 +67,7 @@ w2v_embdding_size = 100
 if model_name=="word2vec_model":
 	model = Word2Vec.load(model_name)
 if model_name=="bert_pretrained":
-	model = BertForMaskeLM.from_pretrained('bert-base-uncased')
+	model = BertForMaskedLM.from_pretrained('bert-base-uncased')
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
