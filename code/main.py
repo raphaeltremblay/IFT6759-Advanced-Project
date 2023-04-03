@@ -104,7 +104,6 @@ def Encode_Sentence_Data(array, label_map):
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
-			print("1 sentence done encoding")
 
 		labels.append(label_map.index(label))
 
