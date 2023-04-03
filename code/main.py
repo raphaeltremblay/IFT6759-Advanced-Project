@@ -3,9 +3,8 @@ import numpy as np
 from gensim.models import Word2Vec
 from gensim import downloader
 from coarse2fine import C2F
-from distilbert import DistilBertModels
-import pytorch_pretrained_bert
-from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
+# from distilbert import DistilBertModels
+from transformers import AutoModel, AutoTokenizer
 import torch
 import os
 import sys
@@ -18,7 +17,7 @@ label_SC, label_SSR, label_SRL = set(), set(), set()
 # dir = dir.replace("\code", "")
 dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
-dataset = "MAM"
+dataset = sys.argv[2]
 #Choose which embedding model to use below between "word2vec_model" and "bert_pretrained",
 model_name = sys.argv[1]
 
@@ -65,10 +64,18 @@ print(len(train_SRL), len(test_SRL))
 
 
 w2v_embdding_size = 100
+
 if model_name=="word2vec_model":
 	model = Word2Vec.load(model_name)
+	
 if model_name=="bert_pretrained":
-	model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+	model = AutoModel.from_pretrained('bert-base-uncased')
+	model.to("cuda")
+
+if model_name=="distilbert_pretrained":
+	model = AutoModel.from_pretrained('distilbert-base-uncased')
+	model.to("cuda")
+	
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
@@ -95,11 +102,21 @@ def Encode_Sentence_Data(array, label_map):
 			embeddings.append(mat)
 
 		if model_name=="bert_pretrained":
-			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-			tokenized_text = tokenizer.tokenize(sentence)
-			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
-			tokens_tensor = torch.tensor([indexed_tokens])
-			embeddings.append(tokens_tensor)
+			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
+		
+		if model_name=="distilbert_pretrained":
+			tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
+			
 		labels.append(label_map.index(label))
 
 		# print(line)
@@ -139,17 +156,35 @@ def Encode_Word_Data(array, label_map):
 				wembeddings.append(rep)
 
 		if model_name=="bert_pretrained":
-			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-			tokenized_text = tokenizer.tokenize(sentence)
-			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
-			tokens_tensor = torch.tensor([indexed_tokens])
-			embeddings.append(tokens_tensor)
+			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
-			rep = list(np.array(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(center_word))))
-			rep.extend([index * 1.0])
-			rep = [float(obj) for obj in rep]
-			wembeddings.append(rep)
+			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
+			hidden_word = model(**word_embedding)
+			cls_word = hidden_word.last_hidden_state[:,0,:]
+			wembeddings.append(cls_word)
+		
+		if model_name=="distilbert_pretrained":
+			tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
+			index = int(line[1])
+			center_word = line[0].split(" ")[index]
+			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
+			hidden_word = model(**word_embedding)
+			cls_word = hidden_word.last_hidden_state[:,0,:]
+			wembeddings.append(cls_word)
+			
 		labels.append(label_map.index(label))
 
 		# print(line)
@@ -165,10 +200,10 @@ test_x2,  test_y2  = Encode_Sentence_Data(test_SSR, label_SSR)
 train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
-if model_name=="word2vec_model" or model_name=="bert_pretrained":
-	c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
-	c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
+# if model_name=="word2vec_model" or model_name=="bert_pretrained":
+c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
+c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
 
-if model_name=="distilbert-base-uncased":
-	distil = DistilBertModels(model_name="distilbert-base-uncased", num_labels=len(label_SC))
-	distil.train(train_x1, train_y1, test_x1,  test_y1)
+# if model_name=="distilbert-base-uncased":
+# 	distil = DistilBertModels(model_name="distilbert-base-uncased", num_labels=len(label_SC))
+# 	distil.train(train_x1, train_y1, test_x1,  test_y1)
