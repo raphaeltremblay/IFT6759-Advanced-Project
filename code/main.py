@@ -107,8 +107,7 @@ def Encode_Sentence_Data(array, label_map):
 
 		labels.append(label_map.index(label))
 
-		# print(line)
-
+	print("Encoding Sentence Finished Once")
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
@@ -160,7 +159,7 @@ def Encode_Word_Data(array, label_map):
 		labels.append(label_map.index(label))
 
 		# print(line)
-
+	print("Encoding Words Finished Once")
 	return embeddings, wembeddings, labels
 
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
