@@ -6,14 +6,15 @@ from gensim import downloader
 from coarse2fine import C2F
 import os
 import sys
-from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
+#from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
+from transformers import AutoModel, AutoTokenizer
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
 
 dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
-dataset = "MAM"
+dataset = sys.argv[2]
 #Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
 model_name = sys.argv[1]
 
@@ -24,7 +25,7 @@ if model_name=="word2vec_model":
 	model = Word2Vec.load(model_name)
 
 if model_name=="bert_pretrained":
-	model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+	model = AutoModel.from_pretrained('bert-base-uncased')
 	#model.to("cuda")
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
@@ -97,11 +98,12 @@ def Encode_Sentence_Data(array, label_map):
 			embeddings.append(mat)
 
 		if model_name=="bert_pretrained":
-			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-			tokenized_text = tokenizer.tokenize(sentence)
-			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
-			tokens_tensor = torch.tensor([indexed_tokens])
-			embeddings.append(tokens_tensor)
+			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v) for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
 
 		labels.append(label_map.index(label))
 
@@ -142,17 +144,19 @@ def Encode_Word_Data(array, label_map):
 				wembeddings.append(rep)
 
 		if model_name=="bert_pretrained":
-			tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-			tokenized_text = tokenizer.tokenize(sentence)
-			indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
-			tokens_tensor = torch.tensor([indexed_tokens])
-			embeddings.append(tokens_tensor)
+			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: torch.tensor(v) for k, v in tokenized.items()}
+			hidden = model(**tokenized)
+			cls = hidden.last_hidden_state[:, 0, :]
+			embeddings.append(cls)
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
-			rep = list(np.array(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(center_word))))
-			rep.extend([index * 1.0])
-			rep = [float(obj) for obj in rep]
-			wembeddings.append(rep)
+			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+			word_embedding = {k: torch.tensor(v) for k, v in word_embedding.items()}
+			hidden_word = model(**word_embedding)
+			cls_word = hidden_word.last_hidden_state[:,0,:]
+			wembeddings.append(cls_word)
 		labels.append(label_map.index(label))
 
 		# print(line)
