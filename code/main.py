@@ -26,7 +26,7 @@ if model_name=="word2vec_model":
 
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
-	model.to("cuda")
+	#model.to("cuda")
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
@@ -84,7 +84,7 @@ def Encode_Sentence_Data(array, label_map):
 		words = line[0].split(" ")
 		sentence = line[0]
 		label = line[1]
-
+		i=0
 		mat = []
 		if model_name=="word2vec_model":
 			for word in words:
@@ -100,11 +100,13 @@ def Encode_Sentence_Data(array, label_map):
 		if model_name=="bert_pretrained":
 			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			tokenized = {k: torch.tensor(v) for k, v in tokenized.items()}
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
-
+		if i%10==0:
+			print(i+1, "sentences encoded")
+		i=+1
 		labels.append(label_map.index(label))
 
 	print("Encoding Sentence Finished Once")
@@ -145,14 +147,14 @@ def Encode_Word_Data(array, label_map):
 		if model_name=="bert_pretrained":
 			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			tokenized = {k: torch.tensor(v) for k, v in tokenized.items()}
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
 			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
+			word_embedding = {k: torch.tensor(v) for k, v in word_embedding.items()}
 			hidden_word = model(**word_embedding)
 			cls_word = hidden_word.last_hidden_state[:,0,:]
 			wembeddings.append(cls_word)
