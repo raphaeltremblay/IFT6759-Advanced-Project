@@ -5,17 +5,17 @@ from gensim.models import Word2Vec
 from gensim import downloader
 from coarse2fine import C2F
 import os
+import sys
 from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
 
-dir = os.getcwd()
-dir = dir.replace("\code", "")
+dir = ".."
 #Choose which dataset to use below between "COR" and "MAM"
 dataset = "MAM"
 #Choose which embedding model to use below between "word2vec_model", "bert_pretrained"
-model_name = "bert_pretrained"
+model_name = sys.argv[1]
 
 
 w2v_embdding_size = 100
@@ -169,5 +169,10 @@ train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 
-c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
-c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
+if model_name=="word2vec_model" or model_name=="bert_pretrained":
+	c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
+	c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
+
+if model_name=="distilbert-base-uncased":
+	distil = DistilBertModels(model_name="distilbert-base-uncased", num_labels=len(label_SC))
+	distil.train(train_x1, train_y1, test_x1,  test_y1)
