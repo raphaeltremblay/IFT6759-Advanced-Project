@@ -26,7 +26,7 @@ if model_name=="word2vec_model":
 
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
-	#model.to("cuda")
+	model.to("cuda")
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
 	objs = line.lower().split(", ")
