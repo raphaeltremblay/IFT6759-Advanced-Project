@@ -1,0 +1,8 @@
+scikit-learn
+# Specify along with the version of the package you want to install
+torch == 2.0.0
+tensorflow
+numpy
+gensim
+transformers == 4.27.1
+pytorch-pretrained-bert
