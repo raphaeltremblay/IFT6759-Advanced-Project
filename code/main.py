@@ -1,15 +1,14 @@
-import gensim.models.word2vec
-import numpy as np
-from gensim.models import Word2Vec
-from gensim import downloader
-from coarse2fine import C2F
-# from distilbert import DistilBertModels
-from transformers import AutoModel, AutoTokenizer
-import torch
 import os
 import sys
+import torch
 import torch_xla
+import numpy as np
+from coarse2fine import C2F
+from gensim import downloader
+import gensim.models.word2vec
+from gensim.models import Word2Vec
 import torch_xla.core.xla_model as xm
+from transformers import AutoModel, AutoTokenizer
 
 
 all_SC, all_SSR, all_SRL = [], [], []
