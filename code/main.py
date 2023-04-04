@@ -113,6 +113,16 @@ def Encode_Sentence_Data(array, label_map):
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
 		embeddings = cls.tolist()
+		
+	if model_name=="distilbert_pretrained":
+		sentences_list = [i[0] for i in array]
+		tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
+		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+		with torch.no_grad():
+			hidden = model(**tokenized)
+		cls = hidden.last_hidden_state[:, 0, :]
+		embeddings = cls.tolist()
 
 	for line in array:
 		label = line[1]
@@ -122,7 +132,7 @@ def Encode_Sentence_Data(array, label_map):
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
-	embeddings, wembeddings, labels = [], [], []
+	embeddings, wembeddings, labels, center_words = [], [], [], []
 	for line in array:
 		words = line[0].split(" ")
 		label = line[-1]
