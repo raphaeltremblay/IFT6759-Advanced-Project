@@ -159,7 +159,7 @@ class C2F(torch.nn.Module):
 			df1 = pd.concat([df1,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print( "[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
-		df1.to_csv("../metrics_v1.csv",index=False)
+		df1.to_csv("../metrics/metrics_v1.csv",index=False)
 		v_test_x2 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x2])))
 		
 		df2 = pd.DataFrame()
@@ -186,7 +186,7 @@ class C2F(torch.nn.Module):
 			df2 = pd.concat([df2,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
-		df2.to_csv("../metrics_v2.csv",index=False)
+		df2.to_csv("../metrics/metrics_v2.csv",index=False)
 		v_test_x3s = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x3s])))
 		v_test_x3w = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x3w])))
 		
@@ -215,4 +215,4 @@ class C2F(torch.nn.Module):
 			df3 = pd.concat([df3,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 		
-		df3.to_csv("../metrics_v3.csv",index=False)
+		df3.to_csv("../metrics/metrics_v3.csv",index=False)
