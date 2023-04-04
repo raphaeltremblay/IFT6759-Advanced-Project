@@ -164,13 +164,19 @@ def Encode_Word_Data(array, label_map):
 	print("Encoding Words Finished Once")
 	return embeddings, wembeddings, labels
 
+print("1.Encoding Training Set")
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
+print("1.Encoding Test Set")
 test_x1,  test_y1  = Encode_Sentence_Data(test_SC, label_SC)
 
+print("2.Encoding Training Set")
 train_x2, train_y2 = Encode_Sentence_Data(train_SSR, label_SSR)
+print("2.Encoding Test Set")
 test_x2,  test_y2  = Encode_Sentence_Data(test_SSR, label_SSR)
 
+print("3.Encoding Training Set")
 train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
+print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 
