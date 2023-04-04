@@ -72,13 +72,15 @@ if model_name=="word2vec_model":
 	
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
-	dev = xm.xla_device()
-	model = model.to(dev)
+# 	dev = xm.xla_device()
+# 	model = model.to(dev)
+	model.to("cuda")
 
 if model_name=="distilbert_pretrained":
 	model = AutoModel.from_pretrained('distilbert-base-uncased')
-	dev = xm.xla_device()
-	model = model.to(dev)
+# 	dev = xm.xla_device()
+# 	model = model.to(dev)
+	model.to("cuda")
 	
 	
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
