@@ -172,8 +172,8 @@ def Encode_Word_Data(array, label_map):
 
 print("1.Encoding Training Set")
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
-train_x1.cpu()
-train_y1.cpu()
+train_x1[0].cpu()
+train_y1[0].cpu()
 print("1.Encoding Test Set")
 test_x1,  test_y1  = Encode_Sentence_Data(test_SC, label_SC)
 
