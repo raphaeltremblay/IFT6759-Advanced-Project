@@ -102,7 +102,7 @@ def Encode_Sentence_Data(array, label_map):
 		with torch.no_grad():
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
-		embeddings.append(cls)
+		embeddings = cls.tolist()
 		print(embeddings, cls.size())
 
 	for line in array:
@@ -150,7 +150,7 @@ def Encode_Word_Data(array, label_map):
 		with torch.no_grad():
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
-		embeddings.append(cls)
+		embeddings = cls.tolist()
 		for line in array:
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
@@ -160,7 +160,7 @@ def Encode_Word_Data(array, label_map):
 		with torch.no_grad():
 			hidden_word = model(**word_embedding)
 		cls_word = hidden_word.last_hidden_state[:,0,:]
-		wembeddings.append(cls_word)
+		wembeddings = cls_word.tolist()
 		print(embeddings, cls.size())
 
 	for line in array:
@@ -172,17 +172,13 @@ def Encode_Word_Data(array, label_map):
 
 print("1.Encoding Training Set")
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
-train_x1= train_x1[0].cpu()
 print("1.Encoding Test Set")
 test_x1,  test_y1  = Encode_Sentence_Data(test_SC, label_SC)
-test_x1= test_x1[0].cpu()
 
 print("2.Encoding Training Set")
 train_x2, train_y2 = Encode_Sentence_Data(train_SSR, label_SSR)
-train_x2= train_x2[0].cpu()
 print("2.Encoding Test Set")
 test_x2,  test_y2  = Encode_Sentence_Data(test_SSR, label_SSR)
-test_x2= test_x2[0].cpu()
 
 print("3.Encoding Training Set")
 train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
