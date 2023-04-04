@@ -68,6 +68,7 @@ w2v_embdding_size = 100
 
 if model_name=="word2vec_model":
 	model = Word2Vec.load(model_name)
+	model.to("cuda")
 	
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
