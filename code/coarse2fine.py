@@ -5,8 +5,6 @@ import sklearn.metrics as metrics
 import pandas as pd
 
 
-
-
 def Max_Index(array):
 	max_index = 0
 	for i in range(len(array)):
