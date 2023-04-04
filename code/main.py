@@ -104,8 +104,8 @@ def Encode_Sentence_Data(array, label_map):
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
-		if i%10==0:
-			print(i+1, "sentences encoded")
+		if (i+1)%250==0:
+			print(i+1, "sentences encoded out of", len(array), "embedding length is", len(embeddings))
 		i+=1
 		labels.append(label_map.index(label))
 
