@@ -98,17 +98,17 @@ def Encode_Sentence_Data(array, label_map):
 				embeddings.append(mat)
 
 	if model_name=="bert_pretrained":
-			sentences_list = [i[0] for i in array]
-			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-			tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
-			with torch.no_grad():
-				hidden = model(**tokenized)
-			cls = hidden.last_hidden_state[:, 0, :]
-			embeddings.append(cls)
-			print(embeddings)
+		sentences_list = [i[0] for i in array]
+		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+		with torch.no_grad():
+			hidden = model(**tokenized)
+		cls = hidden.last_hidden_state[:, 0, :]
+		embeddings.append(cls)
+		print(embeddings)
 
-		labels.append(label_map.index(label))
+	labels.append(label_map.index(label))
 
 	print("Encoding Sentence Finished Once")
 	return embeddings, labels
