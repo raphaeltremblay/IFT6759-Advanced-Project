@@ -106,7 +106,7 @@ def Encode_Sentence_Data(array, label_map):
 			embeddings.append(cls)
 		if i%10==0:
 			print(i+1, "sentences encoded")
-		i=+1
+		i+=1
 		labels.append(label_map.index(label))
 
 	print("Encoding Sentence Finished Once")
