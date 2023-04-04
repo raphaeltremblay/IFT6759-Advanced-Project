@@ -72,7 +72,8 @@ if model_name=="word2vec_model":
 	
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
-	model.to("cuda")
+	dev = xm.xla_device()
+	model = model.to(dev)
 
 if model_name=="distilbert_pretrained":
 	model = AutoModel.from_pretrained('distilbert-base-uncased')
