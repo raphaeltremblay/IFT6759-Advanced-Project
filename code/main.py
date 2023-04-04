@@ -103,7 +103,6 @@ def Encode_Sentence_Data(array, label_map):
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
 		embeddings = cls.tolist()
-		print(embeddings, cls.size())
 
 	for line in array:
 		label = line[1]
@@ -161,7 +160,6 @@ def Encode_Word_Data(array, label_map):
 			hidden_word = model(**word_embedding)
 		cls_word = hidden_word.last_hidden_state[:,0,:]
 		wembeddings = cls_word.tolist()
-		print(embeddings, cls.size())
 
 	for line in array:
 		label = line[-1]
@@ -182,12 +180,8 @@ test_x2,  test_y2  = Encode_Sentence_Data(test_SSR, label_SSR)
 
 print("3.Encoding Training Set")
 train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
-train_x3s= train_x3s[0].cpu()
-train_x3w= train_x3w[0].cpu()
 print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
-test_x3s= test_x3s[0].cpu()
-test_x3w= test_x3w[0].cpu()
 
 if model_name=="word2vec_model" or model_name=="bert_pretrained":
 	c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
