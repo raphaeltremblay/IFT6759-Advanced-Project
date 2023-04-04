@@ -103,7 +103,7 @@ def Encode_Sentence_Data(array, label_map):
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
 		embeddings.append(cls)
-		print(embeddings, cls.shape())
+		print(embeddings, cls.size())
 
 	for line in array:
 		label = line[1]
@@ -160,7 +160,8 @@ def Encode_Word_Data(array, label_map):
 				hidden_word = model(**word_embedding)
 			cls_word = hidden_word.last_hidden_state[:,0,:]
 			wembeddings.append(cls_word)
-
+		print(embeddings, cls.size())
+		
 	for line in array:
 		label = line[-1]
 		labels.append(label_map.index(label))
