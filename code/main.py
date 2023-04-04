@@ -100,7 +100,7 @@ def Encode_Sentence_Data(array, label_map):
 		if model_name=="bert_pretrained":
 			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
@@ -114,6 +114,7 @@ def Encode_Sentence_Data(array, label_map):
 
 def Encode_Word_Data(array, label_map):
 	embeddings, wembeddings, labels = [], [], []
+	i=0
 	for line in array:
 		words = line[0].split(" ")
 		label = line[-1]
@@ -147,21 +148,23 @@ def Encode_Word_Data(array, label_map):
 		if model_name=="bert_pretrained":
 			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+			tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
 			hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
 			embeddings.append(cls)
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
 			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
+			word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
 			hidden_word = model(**word_embedding)
 			cls_word = hidden_word.last_hidden_state[:,0,:]
 			wembeddings.append(cls_word)
 		labels.append(label_map.index(label))
-
+		if (i + 1) % 250 == 0:
+			print(i + 1, "sentences encoded out of", len(array))
+		i += 1
 		# print(line)
-	print("Encoding Words Finished Once")
+		print("Encoding Words Finished Once")
 	return embeddings, wembeddings, labels
 
 print("1.Encoding Training Set")
