@@ -88,45 +88,37 @@ label_SC  = list(label_SC)
 label_SSR = list(label_SSR)
 label_SRL = list(label_SRL)
 
-
 def Encode_Sentence_Data(array, label_map):
 	embeddings, labels = [], []
-	for line in array:
-		words = line[0].split(" ")
-		label = line[1]
-		sentence = line[0]
-		mat = [] 
-		if model_name=="word2vec_model":
+	mat = []
+	if model_name == "word2vec_model":
+		for line in array:
+			words = line[0].split(" ")
 			for word in words:
 				if(word in vocabulary):
 					mat.append(model.wv[word])
 				else:
 					mat.append(model.wv["a"])
-			while len(mat)<10:
-				mat.append(model.wv["a"])
-			mat = mat[:10]
-			embeddings.append(mat)
+				while len(mat)<10:
+					mat.append(model.wv["a"])
+				mat = mat[:10]
+				embeddings.append(mat)
 
-		if model_name=="bert_pretrained":
-			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
+	if model_name=="bert_pretrained":
+		sentences_list = [i[0] for i in array]
+		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+		with torch.no_grad():
 			hidden = model(**tokenized)
-			cls = hidden.last_hidden_state[:, 0, :]
-			embeddings.append(cls)
-		
-		if model_name=="distilbert_pretrained":
-			tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
-			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
-			hidden = model(**tokenized)
-			cls = hidden.last_hidden_state[:, 0, :]
-			embeddings.append(cls)
-			
+		cls = hidden.last_hidden_state[:, 0, :]
+		embeddings = cls.tolist()
+
+	for line in array:
+		label = line[1]
 		labels.append(label_map.index(label))
 
-		# print(line)
-
+	print("Encoding Sentence Finished Once")
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
@@ -162,39 +154,51 @@ def Encode_Word_Data(array, label_map):
 				wembeddings.append(rep)
 
 		if model_name=="bert_pretrained":
+			sentences_list = [i[0] for i in array]
 			tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
-			hidden = model(**tokenized)
+			tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+			with torch.no_grad():
+				hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
-			embeddings.append(cls)
-			index = int(line[1])
-			center_word = line[0].split(" ")[index]
+			embeddings = cls.tolist()
+			for line in array:
+				index = int(line[1])
+				center_word = line[0].split(" ")[index]
+				center_words.append(center_word)
 			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
-			hidden_word = model(**word_embedding)
+			word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
+			with torch.no_grad():
+				hidden_word = model(**word_embedding)
 			cls_word = hidden_word.last_hidden_state[:,0,:]
-			wembeddings.append(cls_word)
+			wembeddings = cls_word.tolist()
 		
 		if model_name=="distilbert_pretrained":
+			sentences_list = [i[0] for i in array]
 			tokenizer = AutoTokenizer.from_pretrained('distilbert-base-uncased')
-			tokenized = tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
-			tokenized = {k: torch.tensor(v).to("cuda") for k, v in tokenized.items()}
-			hidden = model(**tokenized)
+			tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+			tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+			with torch.no_grad():
+				hidden = model(**tokenized)
 			cls = hidden.last_hidden_state[:, 0, :]
-			embeddings.append(cls)
-			index = int(line[1])
-			center_word = line[0].split(" ")[index]
+			embeddings = cls.tolist()
+			for line in array:
+				index = int(line[1])
+				center_word = line[0].split(" ")[index]
+				center_words.append(center_word)
 			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-			word_embedding = {k: torch.tensor(v).to("cuda") for k, v in word_embedding.items()}
-			hidden_word = model(**word_embedding)
+			word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
+			with torch.no_grad():
+				hidden_word = model(**word_embedding)
 			cls_word = hidden_word.last_hidden_state[:,0,:]
-			wembeddings.append(cls_word)
-			
+			wembeddings = cls_word.tolist()
+
+	for line in array:
+		label = line[-1]
 		labels.append(label_map.index(label))
 
 		# print(line)
-
+	print("encoding finished")
 	return embeddings, wembeddings, labels
 
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
