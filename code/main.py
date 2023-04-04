@@ -8,6 +8,8 @@ from transformers import AutoModel, AutoTokenizer
 import torch
 import os
 import sys
+import torch_xla
+import torch_xla.core.xla_model as xm
 
 
 all_SC, all_SSR, all_SRL = [], [], []
@@ -74,7 +76,9 @@ if model_name=="bert_pretrained":
 
 if model_name=="distilbert_pretrained":
 	model = AutoModel.from_pretrained('distilbert-base-uncased')
-	model.to("cuda")
+	dev = xm.xla_device()
+	model = model.to(dev)
+	
 	
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
