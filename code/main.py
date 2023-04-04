@@ -113,7 +113,7 @@ def Encode_Sentence_Data(array, label_map):
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
-	embeddings, wembeddings, labels = [], [], []
+	embeddings, wembeddings, labels, center_words = [], [], [], []
 	mat = []
 	if model_name == "word2vec_model":
 		for line in array:
@@ -154,14 +154,15 @@ def Encode_Word_Data(array, label_map):
 		for line in array:
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
-			word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-			word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
-			with torch.no_grad():
-				hidden_word = model(**word_embedding)
-			cls_word = hidden_word.last_hidden_state[:,0,:]
-			wembeddings.append(cls_word)
+			center_words.append(center_word)
+		word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+		word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
+		with torch.no_grad():
+			hidden_word = model(**word_embedding)
+		cls_word = hidden_word.last_hidden_state[:,0,:]
+		wembeddings.append(cls_word)
 		print(embeddings, cls.size())
-		
+
 	for line in array:
 		label = line[-1]
 		labels.append(label_map.index(label))
