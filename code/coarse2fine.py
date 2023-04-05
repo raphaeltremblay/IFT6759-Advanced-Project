@@ -141,6 +141,7 @@ class C2F(torch.nn.Module):
 			optimizer.zero_grad()
 
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
+			print(rand_index_x1)
 
 			batch_x1 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for i, obj in enumerate(train_x1)  if i in rand_index_x1])))
 			batch_y1 = torch.autograd.Variable(torch.LongTensor(np.array([obj for i, obj in enumerate(train_y1) if i in rand_index_x1])))
