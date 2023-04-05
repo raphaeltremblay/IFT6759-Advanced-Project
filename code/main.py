@@ -80,10 +80,11 @@ label_SRL = list(label_SRL)
 
 def Encode_Sentence_Data(array, label_map):
 	embeddings, labels = [], []
-	mat = []
+
 	if model_name == "word2vec_model":
 		for line in array:
 			words = line[0].split(" ")
+			mat = []
 			for word in words:
 				if(word in vocabulary):
 					mat.append(model.wv[word])
@@ -113,10 +114,10 @@ def Encode_Sentence_Data(array, label_map):
 
 def Encode_Word_Data(array, label_map):
 	embeddings, wembeddings, labels, center_words = [], [], [], []
-	mat = []
 	if model_name == "word2vec_model":
 		for line in array:
 			words = line[0].split(" ")
+			mat = []
 			for word in words:
 				if(word in vocabulary):
 					mat.append(model.wv[word])
