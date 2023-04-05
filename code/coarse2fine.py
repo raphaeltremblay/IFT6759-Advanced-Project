@@ -140,7 +140,7 @@ class C2F(torch.nn.Module):
 		for epoch in range(100):
 			optimizer.zero_grad()
 
-			print(train_dx.shape)
+			print(train_x1.shape)
 			
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
 
