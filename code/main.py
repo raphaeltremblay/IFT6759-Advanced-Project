@@ -113,6 +113,7 @@ def Encode_Sentence_Data(array, label_map):
 		labels.append(label_map.index(label))
 
 	print("Encoding Sentence Finished Once")
+	print(len(embeddings))
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
