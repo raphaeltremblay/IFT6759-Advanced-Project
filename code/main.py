@@ -86,7 +86,9 @@ def Encode_Sentence_Data(array, label_map):
 
 	if model_name == "word2vec_model":
 		for line in array:
+			print(line)
 			words = line[0].split(" ")
+			print(words)
 			mat = []
 			for word in words:
 				if(word in vocabulary):
@@ -100,22 +102,22 @@ def Encode_Sentence_Data(array, label_map):
 			print(len(mat))
 			embeddings.append(mat)
 
-	if model_name=="bert_pretrained":
-		sentences_list = [i[0] for i in array]
-		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
-		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
-		with torch.no_grad():
-			hidden = model(**tokenized)
-		cls = hidden.last_hidden_state[:, 0, :]
-		embeddings = cls.tolist()
+# 	if model_name=="bert_pretrained":
+# 		sentences_list = [i[0] for i in array]
+# 		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+# 		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+# 		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+# 		with torch.no_grad():
+# 			hidden = model(**tokenized)
+# 		cls = hidden.last_hidden_state[:, 0, :]
+# 		embeddings = cls.tolist()
 
 	for line in array:
 		label = line[1]
 		labels.append(label_map.index(label))
 
 # 	print("Encoding Sentence Finished Once")
-	print(len(embeddings))
+# 	print(len(embeddings))
 	return embeddings, labels
 
 def Encode_Word_Data(array, label_map):
@@ -148,31 +150,31 @@ def Encode_Word_Data(array, label_map):
 				rep = [float(obj) for obj in rep]
 				wembeddings.append(rep)
 
-	if model_name=="bert_pretrained":
-		sentences_list = [i[0] for i in array]
-		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
-		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
-		with torch.no_grad():
-			hidden = model(**tokenized)
-		cls = hidden.last_hidden_state[:, 0, :]
-		embeddings = cls.tolist()
-		for line in array:
-			index = int(line[1])
-			center_word = line[0].split(" ")[index]
-			center_words.append(center_word)
-		word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
-		word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
-		with torch.no_grad():
-			hidden_word = model(**word_embedding)
-		cls_word = hidden_word.last_hidden_state[:,0,:]
-		wembeddings = cls_word.tolist()
+# 	if model_name=="bert_pretrained":
+# 		sentences_list = [i[0] for i in array]
+# 		tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+# 		tokenized = tokenizer(sentences_list, padding=True, truncation=True, return_tensors="pt")
+# 		tokenized = {k: v.clone().detach().to("cuda") for k, v in tokenized.items()}
+# 		with torch.no_grad():
+# 			hidden = model(**tokenized)
+# 		cls = hidden.last_hidden_state[:, 0, :]
+# 		embeddings = cls.tolist()
+# 		for line in array:
+# 			index = int(line[1])
+# 			center_word = line[0].split(" ")[index]
+# 			center_words.append(center_word)
+# 		word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+# 		word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
+# 		with torch.no_grad():
+# 			hidden_word = model(**word_embedding)
+# 		cls_word = hidden_word.last_hidden_state[:,0,:]
+# 		wembeddings = cls_word.tolist()
 
 	for line in array:
 		label = line[-1]
 		labels.append(label_map.index(label))
 
-	print("Encoding Words Finished Once")
+# 	print("Encoding Words Finished Once")
 	return embeddings, wembeddings, labels
 
 # print("1.Encoding Training Set")
@@ -191,12 +193,12 @@ train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 # if model_name=="word2vec_model" or model_name=="bert_pretrained":
-print(len(train_x1), len(train_y1))
-print(len(test_x1), len(test_y1))
-print(len(train_x2), len(train_y2))
-print(len(test_x2), len(test_y2))
-print(len(train_x3s), len(train_x3w), len(train_y3)) 
-print(len(test_x3s),  len(test_x3w), len(test_y3))
+# print(len(train_x1), len(train_y1))
+# print(len(test_x1), len(test_y1))
+# print(len(train_x2), len(train_y2))
+# print(len(test_x2), len(test_y2))
+# print(len(train_x3s), len(train_x3w), len(train_y3)) 
+# print(len(test_x3s),  len(test_x3w), len(test_y3))
 
 c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
 c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
