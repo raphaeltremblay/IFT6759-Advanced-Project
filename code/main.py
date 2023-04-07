@@ -87,10 +87,7 @@ def Encode_Sentence_Data(array, label_map):
 
 	if model_name == "word2vec_model":
 		for line in array:
-			print("line")
-# 			print(line + " line")
 			words = line[0].split(" ")
-# 			print(words+ " words")
 			mat = []
 			for word in words:
 				if(word in vocabulary):
@@ -100,8 +97,6 @@ def Encode_Sentence_Data(array, label_map):
 			while len(mat)<10:
 				mat.append(model.wv["a"])
 			mat = mat[:10]
-			print(mat)
-			print(len(mat))
 			embeddings.append(mat)
 
 # 	if model_name=="bert_pretrained":
