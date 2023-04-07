@@ -96,6 +96,8 @@ def Encode_Sentence_Data(array, label_map):
 				while len(mat)<10:
 					mat.append(model.wv["a"])
 				mat = mat[:10]
+				print(mat)
+				print(len(mat))
 				embeddings.append(mat)
 
 	if model_name=="bert_pretrained":
@@ -112,7 +114,7 @@ def Encode_Sentence_Data(array, label_map):
 		label = line[1]
 		labels.append(label_map.index(label))
 
-	print("Encoding Sentence Finished Once")
+# 	print("Encoding Sentence Finished Once")
 	print(len(embeddings))
 	return embeddings, labels
 
@@ -173,19 +175,19 @@ def Encode_Word_Data(array, label_map):
 	print("Encoding Words Finished Once")
 	return embeddings, wembeddings, labels
 
-print("1.Encoding Training Set")
+# print("1.Encoding Training Set")
 train_x1, train_y1 = Encode_Sentence_Data(train_SC, label_SC)
-print("1.Encoding Test Set")
+# print("1.Encoding Test Set")
 test_x1,  test_y1  = Encode_Sentence_Data(test_SC, label_SC)
 
-print("2.Encoding Training Set")
+# print("2.Encoding Training Set")
 train_x2, train_y2 = Encode_Sentence_Data(train_SSR, label_SSR)
-print("2.Encoding Test Set")
+# print("2.Encoding Test Set")
 test_x2,  test_y2  = Encode_Sentence_Data(test_SSR, label_SSR)
 
-print("3.Encoding Training Set")
+# print("3.Encoding Training Set")
 train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
-print("3.Encoding Test Set")
+# print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 # if model_name=="word2vec_model" or model_name=="bert_pretrained":
