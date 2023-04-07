@@ -184,6 +184,13 @@ train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
 print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
+print(len(train_x1), len(train_y1))
+print(len(test_x1), len(test_y1))
+print(len(train_x2), len(train_y2))
+print(len(test_x2), len(test_y2))
+print(len(train_x3s), len(train_x3w), len(train_y3)) 
+print(len(test_x3s),  len(test_x3w), len(test_y3))
+
 if model_name=="word2vec_model" or model_name=="bert_pretrained":
 	c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
 	c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
