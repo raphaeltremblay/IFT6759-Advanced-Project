@@ -68,17 +68,18 @@ ratio = 0.80
 train_SC,  test_SC  = all_SC[:int(len(all_SC)*ratio)],   all_SC[int(len(all_SC)*ratio):]
 train_SSR, test_SSR = all_SSR[:int(len(all_SSR)*ratio)], all_SSR[int(len(all_SSR)*ratio):]
 train_SRL, test_SRL = all_SRL[:int(len(all_SRL)*ratio)], all_SRL[int(len(all_SRL)*ratio):]
-print(len(train_SC), len(test_SC))
-print(len(train_SSR), len(test_SSR))
-print(len(train_SRL), len(test_SRL))
-
-
+# print(len(train_SC), len(test_SC))
+# print(len(train_SSR), len(test_SSR))
+# print(len(train_SRL), len(test_SRL))
 
 vocabulary = set(open(dir + "/data/text8.txt").read().split(" "))
 
 label_SC  = list(label_SC)
 label_SSR = list(label_SSR)
 label_SRL = list(label_SRL)
+print(label_SC)
+print(label_SSR)
+print(label_SRL)
 
 
 def Encode_Sentence_Data(array, label_map):
@@ -86,9 +87,9 @@ def Encode_Sentence_Data(array, label_map):
 
 	if model_name == "word2vec_model":
 		for line in array:
-			print(line)
+			print(line + " line")
 			words = line[0].split(" ")
-			print(words)
+			print(words+ " words")
 			mat = []
 			for word in words:
 				if(word in vocabulary):
