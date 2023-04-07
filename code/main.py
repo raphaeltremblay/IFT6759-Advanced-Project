@@ -6,7 +6,6 @@ from gensim import downloader
 from coarse2fine import C2F
 import os
 import sys
-#from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
 from transformers import AutoModel, AutoTokenizer
 
 all_SC, all_SSR, all_SRL = [], [], []
@@ -26,6 +25,10 @@ if model_name=="word2vec_model":
 
 if model_name=="bert_pretrained":
 	model = AutoModel.from_pretrained('bert-base-uncased')
+	model.to("cuda")
+
+if model_name=="distilbert_pretrained":
+	model = AutoModel.from_pretrained('distilbert-base-uncased')
 	model.to("cuda")
 
 for line in open(dir+"/data/"+dataset+"-SC.txt").read().split("\n"):
