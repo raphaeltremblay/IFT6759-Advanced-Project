@@ -195,7 +195,7 @@ def Encode_Word_Data(array, label_map):
 		with torch.no_grad():
 			hidden_word = model(**word_embedding)
 		cls_word = hidden_word.last_hidden_state[:,0,:]
-		wembeddings = cls_words.tolist()
+		wembeddings = cls_word.tolist()
 		
 	for line in array:
 		label = line[-1]
