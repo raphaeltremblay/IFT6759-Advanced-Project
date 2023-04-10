@@ -1,5 +1,6 @@
 
 import torch
+import pandas as pd
 from torch import optim
 import numpy as np
 import sklearn.metrics as metrics
