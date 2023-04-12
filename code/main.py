@@ -47,17 +47,17 @@ for line in open(dir+"/data/"+dataset+"-SRL.txt").read().split("\n"):
 		all_SRL.append(objs)
 		label_SRL.add(objs[-1])
 
-print(len(all_SC))
-print(all_SC[0:10])
-print(label_SC)
+#print(len(all_SC))
+#print(all_SC[0:10])
+#print(label_SC)
 
-print(len(all_SSR))
-print(all_SSR[0:10])
-print(label_SSR)
+#print(len(all_SSR))
+#print(all_SSR[0:10])
+#print(label_SSR)
 
-print(len(all_SRL))
-print(all_SRL[0:10])
-print(label_SRL)
+#print(len(all_SRL))
+#print(all_SRL[0:10])
+#print(label_SRL)
 
 
 
@@ -65,9 +65,9 @@ ratio = 0.80
 train_SC,  test_SC  = all_SC[:int(len(all_SC)*ratio)],   all_SC[int(len(all_SC)*ratio):]
 train_SSR, test_SSR = all_SSR[:int(len(all_SSR)*ratio)], all_SSR[int(len(all_SSR)*ratio):]
 train_SRL, test_SRL = all_SRL[:int(len(all_SRL)*ratio)], all_SRL[int(len(all_SRL)*ratio):]
-print(len(train_SC), len(test_SC))
-print(len(train_SSR), len(test_SSR))
-print(len(train_SRL), len(test_SRL))
+#print(len(train_SC), len(test_SC))
+#print(len(train_SSR), len(test_SSR))
+#print(len(train_SRL), len(test_SRL))
 
 
 
