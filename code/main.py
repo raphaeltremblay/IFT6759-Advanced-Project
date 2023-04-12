@@ -186,7 +186,6 @@ train_x3s, train_x3w, train_y3 = Encode_Word_Data(train_SRL, label_SRL)
 print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
-print(np.asarray(train_x1).shape)
 if model_name=="bert_pretrained":
 	pca = PCA(n_components=100)
 	train_x1 = np.asarray(train_x1)
