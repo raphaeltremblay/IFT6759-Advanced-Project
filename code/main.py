@@ -157,7 +157,7 @@ def Encode_Word_Data(array, label_map):
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
 			center_words.append(center_word)
-		word_embedding = tokenizer(center_word, padding=True, truncation=True, return_tensors="pt")
+		word_embedding = tokenizer(center_words, padding=True, truncation=True, return_tensors="pt")
 		word_embedding = {k: v.clone().detach().to("cuda") for k, v in word_embedding.items()}
 		with torch.no_grad():
 			hidden_word = model(**word_embedding)
