@@ -25,11 +25,12 @@ def Get_Report(true_labels, pred_labels, labels=None, digits=4):
 
 
 class C2F(torch.nn.Module):
-	def __init__(self, len1, len2, len3):
+	def __init__(self, len1, len2, len3, model):
 		super(C2F, self).__init__()
 
 		self.height = 10
 		self.width  = 100
+		self.model = model
 
 		# self.fc = torch.nn.Linear( in_features=999, out_features=99 )
 
