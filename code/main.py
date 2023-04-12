@@ -222,5 +222,5 @@ print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 
-c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL))
+c2f = C2F(len(label_SC), len(label_SSR), len(label_SRL),model=model_name)
 c2f.train(train_x1, train_y1, test_x1,  test_y1, train_x2, train_y2, test_x2,  test_y2, train_x3s, train_x3w, train_y3, test_x3s,  test_x3w,  test_y3)
