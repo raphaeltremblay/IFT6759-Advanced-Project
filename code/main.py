@@ -190,7 +190,7 @@ print(np.asarray(train_x1).shape)
 if model_name=="bert_pretrained":
 	pca = PCA(n_components=100)
 	train_x1 = np.asarray(train_x1)
-	train_x1 = pca.fit(train_x1)
+	train_x1 = pca.fit_transform(train_x1)
 	print(train_x1.shape)
 #print(len(test_x1), len(test_y1))
 #print(len(train_x2), len(train_y2))
