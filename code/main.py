@@ -118,6 +118,7 @@ def Encode_Sentence_Data(array, label_map):
 		with torch.no_grad():
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
+		print(cls.shape)
 		embeddings = cls.tolist()
 
 	for line in array:
@@ -185,6 +186,7 @@ def Encode_Word_Data(array, label_map):
 		with torch.no_grad():
 			hidden = model(**tokenized)
 		cls = hidden.last_hidden_state[:, 0, :]
+		print(cls.shape)
 		embeddings = cls.tolist()
 		for line in array:
 			index = int(line[1])
