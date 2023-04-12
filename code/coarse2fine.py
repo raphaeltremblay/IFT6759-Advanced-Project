@@ -56,6 +56,7 @@ class C2F(torch.nn.Module):
 		self.ST3_fc2 = torch.nn.Linear(50, len3)
 
 	def CNNRNN_Encoder(self, x):
+		print(x.shape)
 		for conv in self.convs:
 			for c in conv:
 				print(type(c))
