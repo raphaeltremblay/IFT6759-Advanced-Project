@@ -144,7 +144,7 @@ class C2F(torch.nn.Module):
 			print(rand_index_x1.shape)
 			batch_x1 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for i, obj in enumerate(train_x1)  if i in rand_index_x1])))
 			batch_y1 = torch.autograd.Variable(torch.LongTensor(np.array([obj for i, obj in enumerate(train_y1) if i in rand_index_x1])))
-			#batch_x1 = torch.unsqueeze(batch_x1, 1)
+
 			train_prediction = self.coarse_forward1(batch_x1)
 
 			loss = criterion(train_prediction, batch_y1)
