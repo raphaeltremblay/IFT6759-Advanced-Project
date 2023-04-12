@@ -197,7 +197,7 @@ if model_name=="bert_pretrained":
 	train_x3w = np.asarray(train_x3w)
 	test_x3s = np.asarray(test_x3s)
 	test_x3w = np.asarray(test_x3w)
-
+	print(train_x3w.shape)
 	train_x1 = pca.fit_transform(train_x1)
 	test_x1 = pca.fit_transform(test_x1)
 	train_x2 = pca.fit_transform(train_x2)
