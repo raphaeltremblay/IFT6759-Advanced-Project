@@ -8,6 +8,8 @@ import os
 import sys
 #from pytorch_pretrained_bert import BertForMaskedLM, BertTokenizer
 from transformers import AutoModel, AutoTokenizer
+import sklearn
+from sklearn.decomposition import PCA
 
 all_SC, all_SSR, all_SRL = [], [], []
 label_SC, label_SSR, label_SRL = set(), set(), set()
@@ -185,6 +187,10 @@ print("3.Encoding Test Set")
 test_x3s,  test_x3w,  test_y3  = Encode_Word_Data(test_SRL, label_SRL)
 
 print(np.asarray(train_x1).shape)
+if model_name=="bert_pretrained":
+	pca = PCA(n_components=100)
+	train_x1 = pca.fit(train_x1)
+	print(np.asarray(train_x1).shape)
 #print(len(test_x1), len(test_y1))
 #print(len(train_x2), len(train_y2))
 #print(len(test_x2), len(test_y2))
