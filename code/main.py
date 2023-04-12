@@ -92,10 +92,10 @@ def Encode_Sentence_Data(array, label_map):
 					mat.append(model.wv[word])
 				else:
 					mat.append(model.wv["a"])
-				while len(mat)<10:
-					mat.append(model.wv["a"])
-				mat = mat[:10]
-				embeddings.append(mat)
+			while len(mat)<10:
+				mat.append(model.wv["a"])
+			mat = mat[:10]
+			embeddings.append(mat)
 
 	if model_name=="bert_pretrained":
 		sentences_list = [i[0] for i in array]
@@ -125,11 +125,11 @@ def Encode_Word_Data(array, label_map):
 					mat.append(model.wv[word])
 				else:
 					mat.append(model.wv["a"])
-			while len(mat)<10:
-				mat.append(model.wv["a"])
-			mat = mat[:10]
+		while len(mat)<10:
+			mat.append(model.wv["a"])
+		mat = mat[:10]
 
-			embeddings.append(mat)
+		embeddings.append(mat)
 
 			index = int(line[1])
 			center_word = line[0].split(" ")[index]
