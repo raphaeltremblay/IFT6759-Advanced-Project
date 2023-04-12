@@ -77,6 +77,7 @@ class C2F(torch.nn.Module):
 
 	def coarse_forward1(self, x1):
 		# (32, 212)
+		print(x1.shape)
 		x1e = self.CNNRNN_Encoder(x1)
 		# print(x1e.shape)
 
