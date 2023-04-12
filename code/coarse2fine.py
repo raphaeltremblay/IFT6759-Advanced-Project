@@ -57,9 +57,11 @@ class C2F(torch.nn.Module):
 
 	def CNNRNN_Encoder(self, x):
 		print(x.shape)
-		for conv in self.convs:
-			for c in conv:
-				print(type(c))
+		x = torch.reshape(x,(1,2,100))
+# 		print(x.shape)
+# 		for conv in self.convs:
+# 			for c in conv:
+# 				print(type(c))
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
