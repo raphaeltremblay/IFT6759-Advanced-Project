@@ -63,6 +63,7 @@ class C2F(torch.nn.Module):
 		self.ST3_fc2 = torch.nn.Linear(50, len3)
 
 	def CNNRNN_Encoder(self, x):
+		print("x shape in CNNRNN_enc=",x.shape)
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
@@ -86,7 +87,7 @@ class C2F(torch.nn.Module):
 
 	def coarse_forward1(self, x1):
 		# (32, 212)
-		print(x1.shape)
+		print("x1 shape in coarse_f1=",x1.shape)
 		x1e = self.CNNRNN_Encoder(x1)
 		# print(x1e.shape)
 
