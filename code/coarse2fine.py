@@ -37,10 +37,10 @@ class C2F(torch.nn.Module):
 		if self.model == "bert_pretrained" or self.model == "distilbert_pretrained":
 			self.convs = torch.nn.ModuleList([
 						torch.nn.Sequential(
-		 					torch.nn.Conv1d(in_channels=1, out_channels=32, kernel_size=4, stride=2),
+		 					torch.nn.Conv1d(in_channels=1, out_channels=4, kernel_size=h, stride=1),
 		 					torch.nn.ReLU(),
-		 					torch.nn.MaxPool1d()
-						)])
+		 					torch.nn.MaxPool1d(kernel_size=10-h)
+						) for h in [2,3,4]])
 		else:
  			self.convs = torch.nn.ModuleList([
 				torch.nn.Sequential(
