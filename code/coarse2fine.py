@@ -81,14 +81,14 @@ class C2F(torch.nn.Module):
 # # 			for c in conv:
 # # 				print(type(c))
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
-		print(xd.shape)
+# 		print(xd.shape)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
-		# print(xd.shape)
+		print(xd.shape)
 
 		xu = x.view(-1, 10, 100)
 		xu, _ = self.rnn(xu, None)
-		# print(xu.shape)
+		print(xu.shape)
 
 		xu_left = xu[:, 0, :]
 		xu_right = xu[:, -1, :]
