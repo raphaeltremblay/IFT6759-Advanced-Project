@@ -35,6 +35,23 @@ class C2F(torch.nn.Module):
 		# self.fc = torch.nn.Linear( in_features=999, out_features=99 )
 
 		self.rnn = torch.nn.RNN(input_size=100, hidden_size=50, num_layers=1, batch_first=True, bidirectional=True)
+		
+# 		if self.model=="bert_pretrained" or self.model=="distilbert_pretrained":
+# 			self.convs = torch.nn.ModuleList([
+# 				torch.nn.Sequential(
+# 					torch.nn.Conv1d(in_channels=1, out_channels=32, kernel_size=4, stride=2),
+# 					torch.nn.ReLU(),
+# 					torch.nn.MaxPool1d()
+					
+# 			)])
+# 		else:
+		
+# 			self.convs = torch.nn.ModuleList([
+# 				torch.nn.Sequential(
+# 					torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(h, 100), stride=(1, self.width), padding=0),
+# 					torch.nn.ReLU(),
+# 					torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))
+# 					) for h in [2, 3, 4]])
 
 		self.convs = torch.nn.ModuleList([
 			torch.nn.Sequential(
@@ -42,7 +59,6 @@ class C2F(torch.nn.Module):
 				torch.nn.ReLU(),
 				torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))
 				) for h in [2, 3, 4]])
-
 		self.gate1 = torch.autograd.Variable(torch.randn(1, 12))
 		self.gate2 = torch.autograd.Variable(torch.randn(1, 50))
 		self.gate3 = torch.autograd.Variable(torch.randn(1, 50))
@@ -57,13 +73,15 @@ class C2F(torch.nn.Module):
 		self.ST3_fc2 = torch.nn.Linear(50, len3)
 
 	def CNNRNN_Encoder(self, x):
-		print(x.shape)
-		x = torch.reshape(x,(1,2,100))
 # 		print(x.shape)
-# 		for conv in self.convs:
-# 			for c in conv:
-# 				print(type(c))
+# 		x = torch.reshape(x,(1,2,100))
+# 		xd = None
+# # 		print(x.shape)
+# # 		for conv in self.convs:
+# # 			for c in conv:
+# # 				print(type(c))
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
+		print(xd.shape)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
 		# print(xd.shape)
