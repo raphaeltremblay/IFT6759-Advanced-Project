@@ -165,7 +165,8 @@ class C2F(torch.nn.Module):
 		
 		df1 = pd.DataFrame()
 		
-		for epoch in range(100):
+		for epoch in range(10):
+			#100
 			optimizer.zero_grad()
 			
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
@@ -192,7 +193,8 @@ class C2F(torch.nn.Module):
 		
 		df2 = pd.DataFrame()
 		
-		for epoch in range(200):
+		for epoch in range(20):
+			#200
 			optimizer.zero_grad()
 
 			rand_index_x2 = np.random.choice(len(train_x2), size=32, replace=False)
@@ -220,7 +222,8 @@ class C2F(torch.nn.Module):
 		
 		df3 = pd.DataFrame()
 		
-		for epoch in range(1000):
+		for epoch in range(10):
+			#1000
 			optimizer.zero_grad()
 
 			rand_index_x3 = np.random.choice(len(train_x3s), size=32, replace=False)
