@@ -165,7 +165,7 @@ class C2F(torch.nn.Module):
 		
 		df1 = pd.DataFrame()
 		
-		for epoch in range(10):
+		for epoch in range(100):
 			#100
 			optimizer.zero_grad()
 			
@@ -193,7 +193,7 @@ class C2F(torch.nn.Module):
 		
 		df2 = pd.DataFrame()
 		
-		for epoch in range(20):
+		for epoch in range(200):
 			#200
 			optimizer.zero_grad()
 
@@ -222,7 +222,7 @@ class C2F(torch.nn.Module):
 		
 		df3 = pd.DataFrame()
 		
-		for epoch in range(10):
+		for epoch in range(1000):
 			#1000
 			optimizer.zero_grad()
 
