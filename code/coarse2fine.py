@@ -83,7 +83,6 @@ class C2F(torch.nn.Module):
 
     def coarse_forward1(self, x1):
         # (32, 212)
-        print("x1 shape in coarse_f1=", x1.shape)
         x1e = self.CNNRNN_Encoder(x1)
         # print(x1e.shape)
 
@@ -150,7 +149,6 @@ class C2F(torch.nn.Module):
             optimizer.zero_grad()
 
             rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
-            print(rand_index_x1.shape)
             batch_x1 = torch.autograd.Variable(
                 torch.Tensor(np.array([[obj] for i, obj in enumerate(train_x1) if i in rand_index_x1])))
             batch_y1 = torch.autograd.Variable(
