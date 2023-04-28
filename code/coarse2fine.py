@@ -1,4 +1,6 @@
+
 import torch
+import pandas as pd
 from torch import optim
 import pandas as pd
 import numpy as np
@@ -15,10 +17,10 @@ def Max_Index(array):
 	return max_index
 
 def Get_Report(true_labels, pred_labels, labels=None, digits=4):
-	recall = metrics.recall_score(true_labels, pred_labels, average='macro', zero_division=0)
-	precision = metrics.precision_score(true_labels, pred_labels, average='macro', zero_division=0)
-	macrof1 = metrics.f1_score(true_labels, pred_labels, average='macro', zero_division=0)
-	microf1 = metrics.f1_score(true_labels, pred_labels, average='micro', zero_division=0)
+	recall = metrics.recall_score(true_labels, pred_labels, average='macro')
+	precision = metrics.precision_score(true_labels, pred_labels, average='macro')
+	macrof1 = metrics.f1_score(true_labels, pred_labels, average='macro')
+	microf1 = metrics.f1_score(true_labels, pred_labels, average='micro')
 	acc = metrics.accuracy_score(true_labels, pred_labels)
 	return recall, precision, macrof1, microf1, acc
 
@@ -64,6 +66,7 @@ class C2F(torch.nn.Module):
 
 	def CNNRNN_Encoder(self, x):
 		print("x shape in CNNRNN_enc=",x.shape)
+
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
@@ -146,10 +149,12 @@ class C2F(torch.nn.Module):
 		optimizer = optim.Adam(self.parameters(), lr=0.00001)
 
 		v_test_x1  = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x1])))
-
+		
+		df1 = pd.DataFrame()
+		
 		for epoch in range(100):
 			optimizer.zero_grad()
-
+			
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
 			print(rand_index_x1.shape)
 			batch_x1 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for i, obj in enumerate(train_x1)  if i in rand_index_x1])))
@@ -166,11 +171,14 @@ class C2F(torch.nn.Module):
 			prediction_test = self.coarse_forward1(v_test_x1)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y1, pre_labels)
+			df1 = pd.concat([df1,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print( "[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
-
+		df1.to_csv("../metrics/metrics_v1.csv",index=False)
 		v_test_x2 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x2])))
-
+		
+		df2 = pd.DataFrame()
+		
 		for epoch in range(200):
 			optimizer.zero_grad()
 
@@ -190,12 +198,15 @@ class C2F(torch.nn.Module):
 			prediction_test = self.coarse_forward2(v_test_x2)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y2, pre_labels)
+			df2 = pd.concat([df2,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
 
-
+		df2.to_csv("../metrics/metrics_v2.csv",index=False)
 		v_test_x3s = torch.autograd.Variable(torch.Tensor(np.array([[obj] for obj in test_x3s])))
 		v_test_x3w = torch.autograd.Variable(torch.Tensor(np.array([np.array(obj) for obj in test_x3w])))
-
+		
+		df3 = pd.DataFrame()
+		
 		for epoch in range(1000):
 			optimizer.zero_grad()
 
@@ -216,4 +227,7 @@ class C2F(torch.nn.Module):
 			prediction_test = self.fine_forward3(v_test_x3s, v_test_x3w)
 			pre_labels = [Max_Index(line) for line in prediction_test.data.numpy()]
 			recall, precision, macrof1, microf1, acc = Get_Report(test_y3, pre_labels)
+			df3 = pd.concat([df3,pd.DataFrame({'recall':[recall],'precision':[precision],'macrof1':[macrof1],'microf1':[microf1],'acc':[acc]})],axis=0,ignore_index=True)
 			print("[{:4d}]    recall:{:.4%}    precision:{:.4%}    macrof1:{:.4%}    microf1:{:.4%}    accuracy:{:.4%}".format(epoch, recall, precision, macrof1, microf1, acc))
+		
+		df3.to_csv("../metrics/metrics_v3.csv",index=False)

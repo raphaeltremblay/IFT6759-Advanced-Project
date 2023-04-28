@@ -1,8 +1,15 @@
 scikit-learn
-# Specify along with the version of the package you want to install
+
 torch == 2.0.0
+torchvision == 0.15.1
+
 tensorflow
 numpy
 gensim
 transformers == 4.27.1
+
 pytorch-pretrained-bert
+cloud-tpu-client==0.10
+gensim==4.3.1
+https://storage.googleapis.com/tpu-pytorch/wheels/colab/torch_xla-2.0-cp39-cp39-linux_x86_64.whl
+
