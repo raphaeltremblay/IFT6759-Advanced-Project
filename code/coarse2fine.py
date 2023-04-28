@@ -36,20 +36,19 @@ class C2F(torch.nn.Module):
 		# self.fc = torch.nn.Linear( in_features=999, out_features=99 )
 
 		self.rnn = torch.nn.RNN(input_size=100, hidden_size=50, num_layers=1, batch_first=True, bidirectional=True)
-		if self.model == "bert_pretrained" or self.model == "distilbert_pretrained":
-			self.convs = torch.nn.ModuleList([
-						torch.nn.Sequential(
-		 					torch.nn.Conv1d(in_channels=1, out_channels=4, kernel_size=h, stride=1),
-		 					torch.nn.ReLU(),
-		 					torch.nn.MaxPool1d(kernel_size=10-h)
-						) for h in [2,3,4]])
-		else:
- 			self.convs = torch.nn.ModuleList([
+		#if self.model == "bert_pretrained" or self.model == "distilbert_pretrained":
+		#	self.convs = torch.nn.ModuleList([
+		#				torch.nn.Sequential(
+		 #					torch.nn.Conv1d(in_channels=1, out_channels=4, kernel_size=h, stride=1),
+		# 					torch.nn.ReLU(),
+		# 					torch.nn.MaxPool1d(kernel_size=10-h)
+		#				) for h in [2,3,4]])
+ 		self.convs = torch.nn.ModuleList([
 				torch.nn.Sequential(
 				torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(h, 100), stride=(1, self.width), padding=0),
 				torch.nn.ReLU(),
 				torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))
-		 		) for h in [2, 3, 4]])
+		) for h in [2, 3, 4]])
 
 		self.gate1 = torch.autograd.Variable(torch.randn(1, 12))
 		self.gate2 = torch.autograd.Variable(torch.randn(1, 50))
@@ -69,7 +68,8 @@ class C2F(torch.nn.Module):
 		print("x shape in CNNRNN_enc=",x.shape)
 
 		if x.size(-1)==768:
-			x = self.bert_linear(x)
+			x = self.bert_linear(x).unsqueeze(-1)
+			x = x.reshape(-1,-1,10,100)
 		print("x shape in CNNRNN_enc=",x.shape)
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
