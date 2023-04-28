@@ -43,12 +43,7 @@ class C2F(torch.nn.Module):
 		# 					torch.nn.ReLU(),
 		# 					torch.nn.MaxPool1d(kernel_size=10-h)
 		#				) for h in [2,3,4]])
- 		self.convs = torch.nn.ModuleList([
-				torch.nn.Sequential(
-				torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(h, 100), stride=(1, self.width), padding=0),
-				torch.nn.ReLU(),
-				torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))
-		) for h in [2, 3, 4]])
+ 		self.convs = torch.nn.ModuleList([torch.nn.Sequential(torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(h, 100), stride=(1, self.width), padding=0),torch.nn.ReLU(),torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))) for h in [2, 3, 4]])
 
 		self.gate1 = torch.autograd.Variable(torch.randn(1, 12))
 		self.gate2 = torch.autograd.Variable(torch.randn(1, 50))
