@@ -62,7 +62,7 @@ class C2F(torch.nn.Module):
 
         if x.size(-1) == 768:
             x = self.bert_linear(x).unsqueeze(-1)
-            x = x.reshape(-1, 1, 10, 100)
+            x = x.reshape(x.size(0),x.size(1), 10, 100)
         print("x shape in CNNRNN_enc=", x.shape)
         xd = torch.cat([conv(x) for conv in self.convs], dim=1)
         xd = xd.view(-1, xd.size(1))
