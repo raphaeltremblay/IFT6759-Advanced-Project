@@ -2,6 +2,7 @@
 import torch
 import pandas as pd
 from torch import optim
+import pandas as pd
 import numpy as np
 import sklearn.metrics as metrics
 
@@ -25,22 +26,30 @@ def Get_Report(true_labels, pred_labels, labels=None, digits=4):
 
 
 class C2F(torch.nn.Module):
-	def __init__(self, len1, len2, len3):
+	def __init__(self, len1, len2, len3, model):
 		super(C2F, self).__init__()
 
 		self.height = 10
 		self.width  = 100
+		self.model = model
 
 		# self.fc = torch.nn.Linear( in_features=999, out_features=99 )
 
 		self.rnn = torch.nn.RNN(input_size=100, hidden_size=50, num_layers=1, batch_first=True, bidirectional=True)
-
-		self.convs = torch.nn.ModuleList([
-			torch.nn.Sequential(
+		if self.model == "bert_pretrained" or self.model == "distilbert_pretrained":
+			self.convs = torch.nn.ModuleList([
+						torch.nn.Sequential(
+		 					torch.nn.Conv1d(in_channels=1, out_channels=4, kernel_size=h, stride=1),
+		 					torch.nn.ReLU(),
+		 					torch.nn.MaxPool1d(kernel_size=10-h)
+						) for h in [2,3,4]])
+		else:
+ 			self.convs = torch.nn.ModuleList([
+				torch.nn.Sequential(
 				torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(h, 100), stride=(1, self.width), padding=0),
 				torch.nn.ReLU(),
 				torch.nn.MaxPool2d(kernel_size=(self.height - h + 1, 1), stride=(self.height - h + 1, 1))
-				) for h in [2, 3, 4]])
+		 		) for h in [2, 3, 4]])
 
 		self.gate1 = torch.autograd.Variable(torch.randn(1, 12))
 		self.gate2 = torch.autograd.Variable(torch.randn(1, 50))
@@ -56,14 +65,12 @@ class C2F(torch.nn.Module):
 		self.ST3_fc2 = torch.nn.Linear(50, len3)
 
 	def CNNRNN_Encoder(self, x):
-		print(x.shape)
-		for conv in self.convs:
-			for c in conv:
-				print(type(c))
+		print("x shape in CNNRNN_enc=",x.shape)
+
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
 		xd = xd * self.gate1
-		# print(xd.shape)
+		print("xd shape:", xd.shape)
 
 		xu = x.view(-1, 10, 100)
 		xu, _ = self.rnn(xu, None)
@@ -83,6 +90,7 @@ class C2F(torch.nn.Module):
 
 	def coarse_forward1(self, x1):
 		# (32, 212)
+		print("x1 shape in coarse_f1=",x1.shape)
 		x1e = self.CNNRNN_Encoder(x1)
 		# print(x1e.shape)
 
@@ -148,7 +156,7 @@ class C2F(torch.nn.Module):
 			optimizer.zero_grad()
 			
 			rand_index_x1 = np.random.choice(len(train_x1), size=32, replace=False)
-
+			print(rand_index_x1.shape)
 			batch_x1 = torch.autograd.Variable(torch.Tensor(np.array([[obj] for i, obj in enumerate(train_x1)  if i in rand_index_x1])))
 			batch_y1 = torch.autograd.Variable(torch.LongTensor(np.array([obj for i, obj in enumerate(train_y1) if i in rand_index_x1])))
 
