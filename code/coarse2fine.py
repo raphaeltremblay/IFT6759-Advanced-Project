@@ -62,7 +62,11 @@ class C2F(torch.nn.Module):
 		self.ST3_fc1 = torch.nn.Linear(212 + 100 + 50 + 1, 50)
 		self.ST3_fc2 = torch.nn.Linear(50, len3)
 
+		self.bert_linear = torch.nn.Linear(768,1000)
 	def CNNRNN_Encoder(self, x):
+		print("x shape in CNNRNN_enc=",x.shape)
+		if x.size(-1)==768:
+			x = self.bert_linear(x)
 		print("x shape in CNNRNN_enc=",x.shape)
 		xd = torch.cat([conv(x) for conv in self.convs], dim=1)
 		xd = xd.view(-1, xd.size(1))
