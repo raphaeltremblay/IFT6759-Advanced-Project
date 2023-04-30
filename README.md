@@ -17,4 +17,4 @@ The dataset named as X-Y denotes a text classification task Y on data source X. 
 To run the experiments, we recommend using the advproj.ipynb notebook on Colab or any other software that reads Jupyter Notebook, and running every cell inside it. 
 * The first cell will prompt a request to connect to your Google Account in order to mount the notebook to it.
 * The second cell will download the directory from this Github. It is possible to choose which branch will be downloaded.
-* The last cell runs the actual experiment. It has the format "!python3 main.py <model_name> <dataset>". For model_name, one can choose between "word2vec_model", "bert_pretrained" or "distilbert-base-uncased" and the datasets are "COR" or "MAM".
+* The last cell runs the actual experiment. It has the format "!python3 main.py <model_name> <dataset>". For model_name, one can choose between "word2vec_model", "bert_pretrained" or "distilbert_pretrained" and the datasets are "COR" or "MAM".
